@@ -1,11 +1,12 @@
 "use client";
 
-import { useSearchParams } from 'next/navigation'
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { agent, TAG } from "@/lib/api";
 
-export default function SearchPage() {
-  const searchParams = useSearchParams()
+function Search() {
+  const searchParams = useSearchParams();
   const params = {
     q: `#${TAG} ` + (searchParams.get("query") || ""), //XXX add #TAG to the query
     tag: [TAG],
@@ -37,5 +38,13 @@ export default function SearchPage() {
       <h1 className="font-bold text-xl my-4">Search Results</h1>
       {contents}
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense>
+      <Search />
+    </Suspense>
   );
 }
