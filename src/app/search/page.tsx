@@ -13,7 +13,7 @@ export default function SearchPage() {
   };
   const { data, error, isLoading } = useSWR(
     ["app.bsky.feed.searchPosts", params],
-    ([_, params]) => agent.app.bsky.feed.searchPosts(params)
+    ([_key, params]) => agent.app.bsky.feed.searchPosts(params)
   );
 
   let contents;
