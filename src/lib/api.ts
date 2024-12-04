@@ -14,7 +14,10 @@ export const publicAgent = new Agent(new URL("https://api.bsky.app"));
 // XXX see https://github.com/bluesky-social/atproto/tree/main/packages/oauth/oauth-client-browser
 export const initializeAuthenticatedAgent = async (handle: string) => {
   const client = new BrowserOAuthClient({
-    clientMetadata: oauthClientMetadataSchema.parse(clientMetadata),
+    clientMetadata:
+      process.env.NODE_ENV === "development"
+        ? undefined
+        : oauthClientMetadataSchema.parse(clientMetadata),
     handleResolver: "https://bsky.social",
   });
   const result: undefined | { session: OAuthSession; state?: string | null } =

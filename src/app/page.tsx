@@ -1,17 +1,22 @@
 "use client";
 
-import Form from 'next/form';
+import Form from "next/form";
 
 export default function HomePage() {
   return (
-    <div className="container mx-auto">
-      <h1 className="font-bold text-xl my-4">Search</h1>
+    <div className="card bg-base-200 w-80">
+      <div className="card-body">
         <Form action="/search">
-          <input name="query" />
-          <div>
-            <button type="submit">Search</button>
+          <div className="card-body">
+            <input
+              name="query"
+              placeholder="query"
+              className="input input-bordered"
+            />
+            <button className="btn btn-neutral">Search</button>
           </div>
         </Form>
+      </div>
     </div>
   );
 }

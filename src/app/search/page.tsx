@@ -22,15 +22,17 @@ function Post({ post }: { post: AppBskyFeedDefs.PostView }) {
   );
   if (embed) {
     return (
-      <>
-        <dt>{embed.title}</dt>
-        <dd>
-          <div>{embed.description}</div>
-          <div>
-            <a href={embed.uri}>{embed.uri}</a>
+      <div className="card bg-base-100 shadow-xl">
+        <div className="card-body">
+          <h2 className="card-title">{embed.title}</h2>
+          <p>{embed.description}</p>
+          <div className="card-actions">
+            <a className="link link-primary" href={embed.uri}>
+              {embed.uri}
+            </a>
           </div>
-        </dd>
-      </>
+        </div>
+      </div>
     );
   }
   return null;
@@ -53,19 +55,15 @@ function Search() {
   if (error) contents = <div>failed to load</div>;
   else if (isLoading) contents = <div>loading...</div>;
   else
-    contents = (
-      <dl>
-        {data?.data.posts.map((post) => (
-          <Post key={post.uri} post={post} />
-        ))}
-      </dl>
-    );
+    contents = data?.data.posts.map((post) => (
+      <Post key={post.uri} post={post} />
+    ));
 
   return (
-    <div className="container mx-auto">
+    <>
       <h1 className="font-bold text-xl my-4">Search Results</h1>
       {contents}
-    </div>
+    </>
   );
 }
 
