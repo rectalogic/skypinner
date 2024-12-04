@@ -1,0 +1,22 @@
+{
+  "client_id": "https://xn--lt8h39e.rectalogic.com/client-metadata.json",
+  "client_name": "SkyPinner",
+  "client_uri": "https://xn--lt8h39e.rectalogic.com",
+  "logo_uri": "https://xn--lt8h39e.rectalogic.com/logo.png",
+  "tos_uri": "https://xn--lt8h39e.rectalogic.com/tos",
+  "policy_uri": "https://xn--lt8h39e.rectalogic.com/policy",
+  "redirect_uris": [
+    "https://xn--lt8h39e.rectalogic.com/callback"
+  ],
+  "scope": "atproto",
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "response_types": [
+    "code"
+  ],
+  "token_endpoint_auth_method": "none",
+  "application_type": "web",
+  "dpop_bound_access_tokens": true
+}

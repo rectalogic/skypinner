@@ -8,7 +8,7 @@ import {
   AppBskyEmbedExternal,
   AppBskyFeedDefs,
 } from "@atproto/api";
-import { agent, TAG } from "@/lib/api";
+import { publicAgent, TAG } from "@/lib/api";
 
 function Post({ post }: { post: AppBskyFeedDefs.PostView }) {
   const embed = useMemo(
@@ -46,7 +46,7 @@ function Search() {
   //XXX handle pagination
   const { data, error, isLoading } = useSWR(
     ["app.bsky.feed.searchPosts", params],
-    ([_key, params]) => agent.app.bsky.feed.searchPosts(params)
+    ([_key, params]) => publicAgent.app.bsky.feed.searchPosts(params)
   );
 
   let contents;
