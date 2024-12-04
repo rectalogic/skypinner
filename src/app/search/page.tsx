@@ -1,9 +1,40 @@
 "use client";
 
-import { Suspense } from "react";
+import { useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
+import {
+  AppBskyFeedPost,
+  AppBskyEmbedExternal,
+  AppBskyFeedDefs,
+} from "@atproto/api";
 import { agent, TAG } from "@/lib/api";
+
+function Post({ post }: { post: AppBskyFeedDefs.PostView }) {
+  const embed = useMemo(
+    () =>
+      AppBskyFeedPost.isRecord(post.record) &&
+      AppBskyFeedPost.validateRecord(post.record).success &&
+      AppBskyEmbedExternal.isMain(post.record.embed)
+        ? post.record.embed.external
+        : undefined,
+    [post]
+  );
+  if (embed) {
+    return (
+      <>
+        <dt>{embed.title}</dt>
+        <dd>
+          <div>{embed.description}</div>
+          <div>
+            <a href={embed.uri}>{embed.uri}</a>
+          </div>
+        </dd>
+      </>
+    );
+  }
+  return null;
+}
 
 function Search() {
   const searchParams = useSearchParams();
@@ -12,6 +43,7 @@ function Search() {
     tag: [TAG],
     limit: 20,
   };
+  //XXX handle pagination
   const { data, error, isLoading } = useSWR(
     ["app.bsky.feed.searchPosts", params],
     ([_key, params]) => agent.app.bsky.feed.searchPosts(params)
@@ -22,15 +54,11 @@ function Search() {
   else if (isLoading) contents = <div>loading...</div>;
   else
     contents = (
-      <ul>
-        {data?.data.posts.map(
-          (
-            post //XXX filter to posts with external embeds
-          ) => (
-            <li key={post.uri}>{post.uri}</li> //XXX render the external embed
-          )
-        )}
-      </ul>
+      <dl>
+        {data?.data.posts.map((post) => (
+          <Post key={post.uri} post={post} />
+        ))}
+      </dl>
     );
 
   return (
