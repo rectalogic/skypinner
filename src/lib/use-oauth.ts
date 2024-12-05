@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Agent } from "@atproto/api";
@@ -9,29 +11,38 @@ import {
 } from "@atproto/oauth-client-browser";
 import clientMetadata from "../../public/client-metadata.json";
 
-const client = new BrowserOAuthClient({
-  clientMetadata:
-    process.env.NODE_ENV === "production"
-      ? oauthClientMetadataSchema.parse(clientMetadata)
-      : atprotoLoopbackClientMetadata(
-          `http://localhost?redirect_uri=${encodeURIComponent(
-            "http://127.0.0.1:3000/login/"
-          )}`
-        ),
-  handleResolver: "https://bsky.social",
-});
+export function useOAuthClient() {
+  const [client, setClient] = useState<BrowserOAuthClient>();
+  useEffect(() => {
+    setClient(
+      new BrowserOAuthClient({
+        clientMetadata:
+          process.env.NODE_ENV === "production"
+            ? oauthClientMetadataSchema.parse(clientMetadata)
+            : atprotoLoopbackClientMetadata(
+                `http://localhost?redirect_uri=${encodeURIComponent(
+                  "http://127.0.0.1:3000/login/"
+                )}`
+              ),
+        handleResolver: "https://bsky.social",
+      })
+    );
+  }, []);
+  return client;
+}
 
-export function signOut(agent: Agent) {
+export function signOut(agent: Agent, client: BrowserOAuthClient) {
   if (agent.sessionManager.did) client.revoke(agent.sessionManager.did);
 }
 
 export function useOAuthAgent({ handle }: { handle?: string }) {
   const router = useRouter();
+  const client = useOAuthClient();
   const [agent, setAgent] = useState<Agent>();
 
   useEffect(() => {
     client
-      .init()
+      ?.init()
       .then(
         (
           result: undefined | { session: OAuthSession; state?: string | null }
@@ -55,6 +66,6 @@ export function useOAuthAgent({ handle }: { handle?: string }) {
           }
         }
       );
-  }, [router, handle]);
+  }, [router, handle, client]);
   return agent;
 }
