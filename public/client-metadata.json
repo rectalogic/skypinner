@@ -6,7 +6,7 @@
   "tos_uri": "https://xn--lt8h39e.rectalogic.com/tos",
   "policy_uri": "https://xn--lt8h39e.rectalogic.com/policy",
   "redirect_uris": [
-    "https://xn--lt8h39e.rectalogic.com/post"
+    "https://xn--lt8h39e.rectalogic.com/login/"
   ],
   "scope": "atproto",
   "grant_types": [

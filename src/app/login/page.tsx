@@ -1,15 +1,13 @@
 "use client";
 
 import Form from "next/form";
-import useOauthAgent from "@/lib/use-oauth";
+import { useOAuthAgent } from "@/lib/use-oauth";
 
 async function onSubmit(data: FormData) {
   console.log(data);
 }
 
 export default function Login() {
-  const agent = useOauthAgent({ handle: "rectalogic.com" });
-  if (agent) console.log(agent.accountDid); //XXX
   return (
     <Form className="grid place-content-center rounded" action={onSubmit}>
       <div className="card rounded-box grid h-32 flex-grow place-items-center">
