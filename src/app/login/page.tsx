@@ -8,7 +8,7 @@ async function onSubmit(data: FormData) {
 }
 
 export default function Login() {
-  const agent = useOauthAgent({ handle: "rectalogic" });
+  const agent = useOauthAgent({ handle: "rectalogic.com" });
   if (agent) console.log(agent.accountDid); //XXX
   return (
     <Form className="grid place-content-center rounded" action={onSubmit}>

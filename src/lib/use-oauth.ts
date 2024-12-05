@@ -32,6 +32,7 @@ export default function useOAuthAgent({ handle }: { handle?: string }) {
         (
           result: undefined | { session: OAuthSession; state?: string | null }
         ) => {
+          debugger;
           if (result) {
             if (result.session) {
               setAgent(new Agent(result.session));
