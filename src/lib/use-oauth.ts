@@ -35,10 +35,11 @@ export function signOut(agent: Agent, client: BrowserOAuthClient) {
   if (agent.sessionManager.did) client.revoke(agent.sessionManager.did);
 }
 
-export function useOAuthAgent({ handle }: { handle?: string }) {
+export function useOAuthAgent(handle?: string, referrer?: string) {
   const router = useRouter();
   const client = useOAuthClient();
   const [agent, setAgent] = useState<Agent>();
+  const [state, setState] = useState<string | null | undefined>(referrer);
 
   useEffect(() => {
     client
@@ -49,13 +50,12 @@ export function useOAuthAgent({ handle }: { handle?: string }) {
         ) => {
           if (result && result.session) {
             setAgent(new Agent(result.session));
+            setState(result.state);
           } else {
-            if (!handle) {
-              router.push("/login");
-            } else if (!result) {
+            if (handle && !result) {
               client
                 .signIn(handle, {
-                  state: document.location.href,
+                  state: referrer,
                   signal: new AbortController().signal, // Optional, allows to cancel the sign in (and destroy the pending authorization, for better security)
                 })
                 .then(() => {
@@ -67,5 +67,5 @@ export function useOAuthAgent({ handle }: { handle?: string }) {
         }
       );
   }, [router, handle, client]);
-  return agent;
+  return { agent, state };
 }

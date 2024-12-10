@@ -1,14 +1,27 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Form from "next/form";
-
-async function onSubmit(data: FormData) {
-  console.log(data);
-}
+import { useSearchParams, useRouter } from "next/navigation";
+import { useOAuthAgent } from "@/lib/use-oauth";
 
 export default function Login() {
+  const [referrer, setReferrer] = useState<string>();
+  useEffect(() => {
+    setReferrer(document.referrer);
+  }, []);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { agent, state } = useOAuthAgent(
+    searchParams.get("handle") || undefined,
+    referrer
+  );
+  if (agent && state) {
+    router.push(state);
+    return;
+  }
   return (
-    <Form className="grid place-content-center rounded" action={onSubmit}>
+    <Form className="grid place-content-center rounded" action="">
       <div className="card rounded-box grid h-32 flex-grow place-items-center">
         <label className="input input-bordered flex items-center gap-2">
           <svg
